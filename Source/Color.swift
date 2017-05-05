@@ -1,7 +1,7 @@
 import AppKit
 import Hue
 
-enum Color: Equatable {
+public enum Color: Equatable {
   case black // 0
   case red // 1
   case green // 2

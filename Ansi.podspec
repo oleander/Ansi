@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Ansi'
-  s.version      = '1.0.0'
+  s.version      = '1.0.1'
   s.summary      = "Ansi parser written in Swift 3"
   s.description = "Ansi parser written in Swift 3."
   s.homepage     = 'https://github.com/oleander/Ansi'
