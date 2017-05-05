@@ -14,7 +14,7 @@ public enum Color: Equatable {
   case index(Int)
   case `default`
 
-  func toNSColor() -> NSColor {
+  public func toNSColor() -> NSColor {
     switch self {
     case .red:
       return NSColor(hex: "#ff0000")
