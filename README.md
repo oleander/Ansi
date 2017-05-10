@@ -1,15 +1,15 @@
-# Emojize [![Status](https://travis-ci.org/oleander/Emojize.svg?branch=master)](https://travis-ci.org/oleander/Emojize)
+# Ansi [![Status](https://travis-ci.org/oleander/Ansi.svg?branch=master)](https://travis-ci.org/oleander/Ansi)
 
-Swift 3 emoji parser for `String`, `NSAttributedString` and `NSMutableAttributedString`.
+Swift 3 Ansi parser which yields `NSAttributedString`. Take a look at the tests for more information:
 
 ## Usage
 
 ```swift
-import Emojize
+import Ansi
 
-"This is a :car:".emojified // => "This is a 🚗"
+"ABC\\e[3;4;33mDEF\\e[0mGHI".colorized // => "ABC" + "DEF".italic.underline.yellow + "GHI"
 ```
 
 ## Install
 
-Add `pod 'Emojize'` to your `Podfile` and run `pod install`.
+Add `pod 'Ansi'` to your `Podfile` and run `pod install`.

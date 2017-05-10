@@ -1,5 +1,5 @@
 test:
 	pod install --verbose --repo-update
-	fastlane scan --scheme Emojize
+	fastlane scan --scheme Ansi
 lint:
 	pod lib lint
