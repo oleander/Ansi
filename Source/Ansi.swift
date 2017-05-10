@@ -1,6 +1,5 @@
 import AppKit
 import Attr
-
 typealias Value = (String, [Code])
 
 enum Result<T> {
@@ -17,11 +16,10 @@ final class Ansi {
       preconditionFailure("failed with \(lines)")
     }
   }
-
   // Apply colors in @colors to @string
   private static func apply(_ attrs: [Value]) -> Mutable {
-    return attrs.reduce("".mutable()) { acc, attr in
-      return acc.appended(attr.1.reduce(attr.0.mutable()) { mutable, code in
+    return attrs.reduce(Mutable(string: "")) { acc, attr in
+      return acc.appended(attr.1.reduce(Mutable(string: attr.0)) { mutable, code in
         switch code {
         case .underline(true):
           return mutable.style(with: .underline)

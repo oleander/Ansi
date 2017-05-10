@@ -1,7 +1,7 @@
 import Quick
 import Cent
 import Nimble
-import Attr
+// import Attr
 @testable import Ansi
 
 class Helper: QuickSpec {
