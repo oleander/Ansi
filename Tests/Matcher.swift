@@ -1,7 +1,5 @@
 import Quick
-import Cent
 import Nimble
-// import Attr
 @testable import Ansi
 
 func test(expect: Code, label: String) -> MatcherFunc<Value> {

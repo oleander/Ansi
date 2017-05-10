@@ -1,5 +1,5 @@
 import AppKit
-import Attr
+import BonMot
 typealias Value = (String, [Code])
 
 enum Result<T> {
@@ -8,7 +8,7 @@ enum Result<T> {
 }
 
 final class Ansi {
-  static func app(_ string: String) -> Mutable {
+  static func app(_ string: String) -> NSAttributedString {
     switch Pro.parse(Pro.getANSIs(), string) {
     case let Result.success(result, _):
       return apply(result)
@@ -17,27 +17,31 @@ final class Ansi {
     }
   }
   // Apply colors in @colors to @string
-  private static func apply(_ attrs: [Value]) -> Mutable {
-    return attrs.reduce(Mutable(string: "")) { acc, attr in
-      return acc.appended(attr.1.reduce(Mutable(string: attr.0)) { mutable, code in
+  private static func apply(_ attrs: [Value]) -> NSAttributedString {
+    let sections = attrs.reduce([] as [NSAttributedString]) { acc, attr in
+      let attrs = attr.1.reduce([] as [StringStyle.Part]) { acc, code in
         switch code {
         case .underline(true):
-          return mutable.style(with: .underline)
+          return acc + [.underline(.styleSingle, .black)]
         case .strikethrough(true):
-          return mutable.style(with: .strikethrough)
+          return acc + [.strikethrough(.styleSingle, .black)]
         case .bold(true):
-          return mutable.style(with: .bold)
+          preconditionFailure("Bold is not implemented")
         case .italic(true):
-          return mutable.style(with: .italic)
+          preconditionFailure("Italic is not implemented")
         case let .color(.background, color):
-          return mutable.style(with: .background(color.toNSColor()))
+          return acc + [.backgroundColor(color.toNSColor())]
         case let .color(.foreground, color):
-          return mutable.style(with: .foreground(color.toNSColor()))
+          return acc + [.color(color.toNSColor())]
         default:
-          return mutable
+          return acc
         }
-      })
+      }
+
+      return acc + [attr.0.styled(with: StringStyle(attrs))]
     }
+
+    return NSAttributedString.composed(of: sections)
   }
 
   private static func toFont(_ code: Int) -> Font {

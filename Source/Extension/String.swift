@@ -1,7 +1,7 @@
 import Foundation
 
 public extension String {
-  public var colorized: NSMutableAttributedString {
+  public var ansified: NSAttributedString {
     return Ansi.app(self)
   }
 }

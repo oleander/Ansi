@@ -1,7 +1,5 @@
 import Quick
-import Cent
 import Nimble
-// import Attr
 @testable import Ansi
 
 class Helper: QuickSpec {
@@ -24,12 +22,10 @@ class Helper: QuickSpec {
 
   public func failure<T>(_ parser: P<T>, _ input: String) {
     switch Pro.parse(parser, input) {
-    case Result.success(_, _): break
-      // TODO: readd */
-    //      fail("Expected failure, got success: \(result) with remain: \(inspect(remain))")
-    case Result.failure(_):
-      // TODO: Implement custom matcher
-      expect(1).to(equal(1))
+    case Result.success:
+      fail("did succeed")
+    case Result.failure:
+      break
     }
   }
 }
