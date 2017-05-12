@@ -15,7 +15,6 @@ extension String {
 class Pro {
   private static let ws = zeroOrMore(whitespace)
   private static let wsOrNl = zeroOrMore(whitespacesOrNewline)
-  private static let manager = NSFontManager.shared()
   private static let terminals = ["\u{1B}", "\\033", "\033", "\\e", "\\x1b"]
   internal static let slash = "\\"
 
@@ -151,21 +150,6 @@ class Pro {
     let parser = noneOf(values)
     if empty { return zeroOrMore(parser) }
     return oneOrMore(parser)
-  }
-
-  private static func toTime(_ value: Int, _ unit: String) -> Int {
-    switch unit {
-    case "s":
-      return value
-    case "m":
-      return toTime(value * 60, "s")
-    case "h":
-      return toTime(value * 60, "m")
-    case "d":
-      return toTime(value * 24, "h")
-    default:
-      preconditionFailure("Invalid unit: \(unit)")
-    }
   }
 
   private static func position(of index: String.CharacterView.Index, in string: String) -> (line: Range<String.CharacterView.Index>, row: Int, pos: Int) {

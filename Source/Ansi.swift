@@ -1,6 +1,8 @@
 import AppKit
 import BonMot
 typealias Value = (String, [Code])
+private let manager = NSFontManager.shared()
+private let fa = NSFont.systemFont(ofSize: 0)
 
 enum Result<T> {
   case failure([String])
@@ -25,10 +27,6 @@ final class Ansi {
           return acc + [.underline(.styleSingle, .black)]
         case .strikethrough(true):
           return acc + [.strikethrough(.styleSingle, .black)]
-        case .bold(true):
-          preconditionFailure("Bold is not implemented")
-        case .italic(true):
-          preconditionFailure("Italic is not implemented")
         case let .color(.background, color):
           return acc + [.backgroundColor(color.toNSColor())]
         case let .color(.foreground, color):
@@ -38,7 +36,18 @@ final class Ansi {
         }
       }
 
-      return acc + [attr.0.styled(with: StringStyle(attrs))]
+      let fa1 = attr.1.reduce(fa) { font, code in
+        switch code {
+        case .bold(true):
+          return manager.convert(font, toHaveTrait: NSFontTraitMask.boldFontMask)
+        case .italic(true):
+          return manager.convert(font, toHaveTrait: NSFontTraitMask.italicFontMask)
+        default:
+          return font
+        }
+      }
+
+      return acc + [attr.0.styled(with: StringStyle(attrs + [.font(fa1)]))]
     }
 
     return NSAttributedString.composed(of: sections)
