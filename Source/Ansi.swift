@@ -2,7 +2,6 @@ import AppKit
 import BonMot
 typealias Value = (String, [Code])
 private let manager = NSFontManager.shared()
-private let fa = NSFont.systemFont(ofSize: 0)
 
 enum Result<T> {
   case failure([String])
@@ -10,16 +9,16 @@ enum Result<T> {
 }
 
 final class Ansi {
-  static func app(_ string: String) -> NSAttributedString {
+  static func app(_ string: String, using font: NSFont) -> NSAttributedString {
     switch Pro.parse(Pro.getANSIs(), string) {
     case let Result.success(result, _):
-      return apply(result)
+      return apply(result, using: font)
     case let Result.failure(lines):
       preconditionFailure("failed with \(lines)")
     }
   }
   // Apply colors in @colors to @string
-  private static func apply(_ attrs: [Value]) -> NSAttributedString {
+  private static func apply(_ attrs: [Value], using aFont: NSFont) -> NSAttributedString {
     let sections = attrs.reduce([] as [NSAttributedString]) { acc, attr in
       let attrs = attr.1.reduce([] as [StringStyle.Part]) { acc, code in
         switch code {
@@ -36,7 +35,7 @@ final class Ansi {
         }
       }
 
-      let fa1 = attr.1.reduce(fa) { font, code in
+      let fa1 = attr.1.reduce(aFont) { font, code in
         switch code {
         case .bold(true):
           return manager.convert(font, toHaveTrait: NSFontTraitMask.boldFontMask)

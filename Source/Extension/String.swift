@@ -1,7 +1,7 @@
-import Foundation
+import AppKit
 
 public extension String {
-  public var ansified: NSAttributedString {
-    return Ansi.app(self)
+  public func ansified(using font: NSFont = NSFont.systemFont(ofSize: 0)) -> NSAttributedString {
+    return Ansi.app(self, using: font)
   }
 }

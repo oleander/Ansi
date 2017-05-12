@@ -7,7 +7,7 @@ Swift 3 Ansi parser which yields `NSAttributedString`. Take a look at the tests 
 ```swift
 import Ansi
 
-"ABC\\e[3;4;33mDEF\\e[0mGHI".ansified // => "ABC" + "DEF".italic.underline.yellow + "GHI"
+"ABC\\e[3;4;33mDEF\\e[0mGHI".ansified() // => "ABC" + "DEF".italic.underline.yellow + "GHI"
 ```
 
 ## Install

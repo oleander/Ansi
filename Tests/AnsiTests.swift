@@ -13,7 +13,7 @@ class AnsiTests: Helper {
     }
 
     it("expects string to have function ansified") {
-      expect("ABC".ansified.string).to(equal("ABC"))
+      expect("ABC".ansified().string).to(equal("ABC"))
     }
 
     it("handles reset") {
