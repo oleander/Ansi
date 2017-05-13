@@ -1,31 +1,22 @@
-import Quick
+ import Quick
 import Nimble
 @testable import Ansi
 
 class Helper: QuickSpec {
-  public func verify<T>(_ parser: P<T>, _ input: String, block: (T) -> Void) {
-    switch Pro.parse(parser, input) {
-    case let Result.success(result, _):
-      block(result)
-    case let Result.failure(lines):
-      fail("Parse error: \(lines)")
+  func match<T>(_ parser: P<T>, _ input: String, _ block: @escaping (T) -> Void) {
+    do {
+      block(try parser.parse(AnyCollection(input.characters)).0)
+    } catch (let error) {
+      fail("Did fail with \(error)")
     }
   }
 
-  public func match<T>(_ parser: P<T>, _ value: String, _ block: @escaping (T) -> Void) {
-    verify(parser, value, block: block)
-  }
-
-  public func test<T>(_ parser: P<T>, _ value: String, _ block: @escaping (T) -> Void) {
-    verify(parser, value, block: block)
-  }
-
-  public func failure<T>(_ parser: P<T>, _ input: String) {
-    switch Pro.parse(parser, input) {
-    case Result.success:
-      fail("did succeed")
-    case Result.failure:
-      break
+  func failure<T>(_ parser: P<T>, _ input: String) {
+    do {
+      let (output, res) = try parser.parse(AnyCollection(input.characters))
+      fail("Expected it to fail but got \(output): \(String(res))")
+    } catch {
+      /* OK */
     }
   }
 }

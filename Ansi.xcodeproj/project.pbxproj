@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2020A7D81EC7BAEE00AE4990 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2020A7D71EC7BAEE00AE4990 /* Error.swift */; };
 		20915D121E9C227B005C3830 /* Ansi.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20915D081E9C227B005C3830 /* Ansi.framework */; };
 		20A24AFA1EC35EB70022F6B1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20EE90F01EC35E1000C988E3 /* Helper.swift */; };
 		20A2CE861EBD25BC002CD48E /* Ansi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20A2CE791EBD25BC002CD48E /* Ansi.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		1B68AD42786B8AF2D2B7FC26 /* Pods_Ansi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ansi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2020A7D71EC7BAEE00AE4990 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Source/Error.swift; sourceTree = "<group>"; };
 		20915D081E9C227B005C3830 /* Ansi.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Ansi.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		20915D111E9C227B005C3830 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		20A2CE721EBD25AA002CD48E /* AnsiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AnsiTests.swift; path = Tests/AnsiTests.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				20A2CE7A1EBD25BC002CD48E /* Attributed.swift */,
 				20A2CE7B1EBD25BC002CD48E /* Code.swift */,
 				20A2CE7C1EBD25BC002CD48E /* Color.swift */,
+				2020A7D71EC7BAEE00AE4990 /* Error.swift */,
 				20A2CE7D1EBD25BC002CD48E /* Font.swift */,
 				20A2CE7E1EBD25BC002CD48E /* Parser.swift */,
 				20A2CE7F1EBD25BC002CD48E /* Speed.swift */,
@@ -379,6 +382,7 @@
 				20A2CE861EBD25BC002CD48E /* Ansi.swift in Sources */,
 				20A2CE871EBD25BC002CD48E /* Attributed.swift in Sources */,
 				20A2CE8D1EBD25BC002CD48E /* Position.swift in Sources */,
+				2020A7D81EC7BAEE00AE4990 /* Error.swift in Sources */,
 				20A2CE891EBD25BC002CD48E /* Color.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

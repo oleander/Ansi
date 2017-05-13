@@ -5,15 +5,15 @@ import Nimble
 class AnsiTests: Helper {
   override func spec() {
     let check = { (_ input: String, block: @escaping ([Value]) -> Void) in
-      self.test(Pro.getANSIs(), input, block)
+      self.match(Pro.ansi, input, block)
     }
 
     let failing = { (input: String) in
-      self.failure(Pro.getANSIs(), input)
+      self.failure(Pro.ansi, input)
     }
 
     it("expects string to have function ansified") {
-      expect("ABC".ansified().string).to(equal("ABC"))
+      expect(try! "ABC".ansified().string).to(equal("ABC"))
     }
 
     it("handles reset") {

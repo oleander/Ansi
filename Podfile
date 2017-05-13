@@ -2,7 +2,7 @@ target 'Ansi' do
   use_frameworks!
   platform :osx, '10.11'
 
-  pod 'Ansi', path: "."
+  podspec
 
   target 'Tests' do
     inherit! :search_paths

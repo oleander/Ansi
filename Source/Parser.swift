@@ -6,12 +6,6 @@ typealias P<T> = Parser<Character, T>
 import FootlessParser
 import AppKit
 
-extension String {
-  func replace(_ what: String, _ with: String) -> String {
-    return replacingOccurrences(of: what, with: with, options: .literal, range: nil)
-  }
-}
-
 class Pro {
   private static let ws = zeroOrMore(whitespace)
   private static let wsOrNl = zeroOrMore(whitespacesOrNewline)
@@ -19,49 +13,30 @@ class Pro {
   internal static let slash = "\\"
 
   /**
-    Apply @parser to a @string
-    I.e parse(getFile(), "a-file.10d.sh")
-  */
-  public static func parse<T>(_ parser: P<T>, _ value: String) -> Result<T> {
-    do {
-      return Result.success(try FootlessParser.parse(parser, value), "")
-    } catch ParseError<Character>.Mismatch(let remainder, let expected, let actual) {
-      let index = value.index(value.endIndex, offsetBy: -Int(remainder.count))
-      let (lineRange, row, pos) = position(of: index, in: value)
-      let line = value[lineRange.lowerBound..<lineRange.upperBound].trimmingCharacters(in: CharacterSet.newlines)
-      var lines = [String]()
-      lines.append("An error occurred when parsing this line:")
-      lines.append(line)
-      lines.append(String(repeating: " ", count: pos) + "^")
-      lines.append("\(row):\(pos) Expected '\(expected)', actual '\(actual)'")
-      return Result.failure(lines)
-    } catch (let error) {
-      return Result.failure([String(describing: error)])
-    }
-  }
-
-  /**
     Reads ANSI codes, i.e "\e[10mHello\e[0;2m" => [[10], "Hello", [0, 2]]
   */
-  internal static func getANSIs() -> P<[Value]> {
-    return Ansi.toAttr <^> zeroOrMore(notAnsi <|> ansi)
+  internal static var ansi: P<[Value]> {
+    return (toAttr <^> zeroOrMore(value <|> attr)) <* eof()
   }
 
   // Anything but \e[...m
-  private static var notAnsi: P<Attributed> {
-    return { .string($0) } <^> til(terminals, empty: false)
+  private static var value: P<Attributed> {
+    return Attributed.string <^> til(terminals, empty: false)
   }
 
   // Input: 5;123, output: Color.index(123)
-  private static var ansi: P<Attributed> {
-    let delimiters: P<String> = anyOf(terminals)
-    return { .codes($0) } <^> (delimiters *> string("[") *> (colorWithArgs <|> codesWithDel) <* string("m"))
+  private static var attr: P<Attributed> {
+    return Attributed.codes <^> (
+      anyOf(terminals) *> string("[") *> (
+        colorWithArgs <|> codesWithDel
+      ) <* string("m")
+    )
   }
 
   // Handles 256 true colors and rgb
   private static var colorWithArgs: P<[Code]> {
     let code = (string("48") <|> string("38")) <* string(";")
-    return curry({ [toCode($0, $1)] }) <^> code <*> (c256 <|> rgb)
+    return curry({ [toColorCode($0, $1)] }) <^> code <*> (c256 <|> rgb)
   }
 
   // Input: 5;123, output: Color.index(123)
@@ -96,7 +71,7 @@ class Pro {
     return zeroOrMore(code) >>- { (codes: [Int]) in
       var nums = [Code]()
       for code in codes {
-        if let found = Ansi.toCode(code) {
+        if let found = toCode(code) {
           nums.append(found)
         } else {
           return stop("Invalid number \(code)")
@@ -108,21 +83,21 @@ class Pro {
   }
 
   private static func anyOf(_ these: [String]) -> P<String> {
-    if these.isEmpty { preconditionFailure("Min 1 arg") }
+    if these.isEmpty { preconditionFailure("[Bug] Min 1 arg") }
     if these.count == 1 { return string(these[0]) }
     return these[1..<these.count].reduce(string(these[0])) { acc, str in
       return acc <|> string(str)
     }
   }
 
-  private static func toCode(_ location: String, _ color: Color) -> Code {
+  private static func toColorCode(_ location: String, _ color: Color) -> Code {
     switch location {
     case "38":
       return .color(.foreground, color)
     case "48":
       return .color(.background, color)
     default:
-      preconditionFailure("Invalid location \(location)")
+      preconditionFailure("[Bug] Invalid location \(location) for \(color)")
     }
   }
 
@@ -150,16 +125,6 @@ class Pro {
     let parser = noneOf(values)
     if empty { return zeroOrMore(parser) }
     return oneOrMore(parser)
-  }
-
-  private static func position(of index: String.CharacterView.Index, in string: String) -> (line: Range<String.CharacterView.Index>, row: Int, pos: Int) {
-    var head = string.startIndex..<string.startIndex
-    var row = 0
-    while head.upperBound < index {
-        head = string.lineRange(for: head.upperBound..<head.upperBound)
-        row += 1
-    }
-    return (head, row, string.distance(from: head.lowerBound, to: index))
   }
 
   internal static func unescape(_ value: String, what: [String]) -> String {
